@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package clock;
+
+service Clock {
+  rpc WhatTimeIsIt(ClockRequest) returns (stream ClockResponse);
+}
+
+message ClockRequest {
+  string name = 1;
+}
+
+message ClockResponse {
+  string message = 1;
+}
+

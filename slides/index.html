@@ -1,0 +1,213 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="author" content="Gonzalo Serrano Revuelta">
+
+        <title>gRPC-go</title>
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/black.css">
+        <meta property="og:title" content="grpc-go" />
+        <meta property="og:description" content="A talk about Golang and gRPC " />
+        <meta property="og:url" content="http://go-sp.gonzaloserrano.io" />
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <style type="text/css" media="screen">
+        .emoji {
+            border: none !important;
+            background: none !important;
+            box-shadow: none !important;
+            margin: 0 0 -5px 0!important;
+            width: 1em !important;
+            height: 1em !important;
+        }
+        .reveal blockquote {
+            width: 90%;
+        }
+        ul.big > li {
+            padding: 10px 0;
+            font-size: 1.4em;
+        }
+        ul.med > li {
+            padding: 8px 0;
+            font-size: 1.1em;
+        }
+        .fragment.highlight-green.visible {
+            color: #CECECE !important;
+        }
+        .fragment.highlight-green.visible.current-fragment {
+            color: #FFC107 !important;
+        }
+        .first {
+            position: relative;
+            border: 1px solid green;
+            opacity: 0.9;
+        }
+        .title_wrapper {
+            position: absolute;
+            right: 10%;
+            width: 40%;
+        }
+        .title_wrapper h1,
+        .title_wrapper h2,
+        .title_wrapper h3,
+        .title_wrapper h4 {
+            color: black;
+        }
+        .transp .backgrounds {
+            opacity: 0.15;
+        }
+        .reveal h1 {
+            font-size: 2.25em;
+        }
+        .reveal pre code {
+            font-size: 1.2em;
+            line-height: 1.1em;
+        }
+        .reveal pre {
+            width: 100%;
+        }
+        .reveal blockquote {
+            font-size: 1.2em;
+            width: 95%;
+        }
+        </style>
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-background="./img/first.png" data-state="first">
+                    <div class="title_wrapper">
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <h1>gRPC-go</h1>
+                        <h4><a href="http://www.meetup.com/Golang-Barcelona/">Golang BCN - July '16</a></h4>
+                        <p>
+                            <a href="http://twitter.com/gonzaloserrano">@gonzaloserrano</a>
+                        </p>
+                    </div>
+                </section>
+                <section data-background="./img/background.png" data-state="transp">
+                    <h1>RPC</h1>
+                    <blockquote>In distributed computing a remote procedure call (RPC) is when a computer program causes a procedure to execute in another address space which is coded as if it were a local procedure call.</blockquote>
+                </section>
+                <section data-background="./img/background.png" data-state="transp">
+                    <h1>gRPC</h1>
+                    <blockquote>a modern, open source remote procedure call (RPC) framework that can run anywhere.</blockquote>
+                    <aside class="notes">
+                        <ul>
+                            <li>stubby</a>
+                        </ul>
+                    </aside>
+                </section>
+                <section data-background="./img/background.png" data-state="transp">
+                    <h2>features</h2>
+                    <ul>
+                        <li>BSD licensed ⇒ OSS</li>
+                        <li>HTTP/2 based ⇒ streams, mux...</li> 
+                        <li>easy ⇒ IDL based, codegen</li>
+                        <li>highly performant & scalable</li>
+                        <li>implementations ⇒ C++, Java, Objective-C, Python, Ruby, Go, C#, Node.js, PHP.</li>
+                        <li>commitment ⇒  Google's public services as gRPC</li>
+                    </ul>
+                </section>
+                <section data-background="./img/background.png" data-state="transp">
+                    <h2>HTTP/2 capabilities</h2>
+                    <ul>
+                        <li>bidirectional streaming ⇒ req/resp, s2c, c2s</li>
+                        <li>flow control ⇒ quotas</li>
+                        <li>header compression ⇒ bandwidth save</li>
+                        <li>single TCP connection ⇒ multiplexing, lower lantency</li>
+                    </ul>
+                    <aside class="notes">
+                        Examples:
+                        bidirectional stream: chat session
+                        server → client stream: stock ticker
+                        client → server stream: sensor aggregation
+                    </aside>
+                </section>
+                <section data-background="./img/background.png" data-state="transp">
+                    <h2>protocol buffers v3</h2>
+                    <blockquote style="font-size: 1em;">language-neutral, platform-neutral, extensible mechanism for serializing structured data</blockquote>
+                    <br/>
+                    <ul>
+                        <li>IDL: interface definition language</li>
+                        <li>gRPC service definition</li>
+                        <li>codegen</li>
+                        <li>binary serialization</li>
+                    </ul>
+                </section>
+                <section data-background="./img/background.png" data-state="transp">
+                    <h2>example</h2>
+                    <pre><code>syntax = "proto3";
+
+package clock;
+
+service Clock {
+  rpc WhatTimeIsIt(ClockRequest) returns (stream ClockResponse);
+}
+
+message ClockRequest {
+  string name = 1;
+}
+
+message ClockResponse {
+  string message = 1;
+}
+                </code></pre>
+                </section>
+                <section data-background="./img/background.png" data-state="transp">
+                    <h1>demo</h1>
+                    <h3>protobufs + </h3>
+                    <h3>go server + </h3>
+                    <h3><strike>PHP</strike> <strike>node</strike> go client</h3>
+                </section>
+                <section data-background="./img/background.png" data-state="transp">
+                    <h1 style="font-size: 3.5em;">Thanks!</h1>
+                    <h3>More info:</h3>
+                    <ul size="med">
+                        <li><a href="https://github.com/gonzaloserrano/grpc-go-lightning-talk/tree/master/src">examples source</a></li>
+                        <li><a href="http://www.grpc.io/">http://www.grpc.io</a></li>
+                        <li><a href="http://google-opensource.blogspot.com.es/2015/02/introducing-grpc-new-open-source-http2.html">announcement blog post</a></li>
+                        <li><a href="https://talks.golang.org/2015/gotham-grpc.slide">GothamGo 2015: gRPC</a></li>
+                        <li><a href="https://hpbn.co/http2/">High Performance Browser Networking book on HTTP/2</a></li>
+                        <li><a href="https://apihandyman.io/do-you-really-know-why-you-prefer-rest-over-rpc/">REST vs RPC</a></li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                history: true,
+
+                // More info https://github.com/hakimel/reveal.js#dependencies
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+    </body>
+</html>
